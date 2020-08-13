@@ -14,29 +14,10 @@
     <properties>
         <registry.version>1.2.3-SNAPSHOT</registry.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <!-- Quarkus -->
-        <quarkus.version>1.5.1.Final</quarkus.version>
-        <!-- Proto -->
-        <os-maven-plugin.version>1.6.1</os-maven-plugin.version>
-        <!-- Maven plugins-->
-        <maven-resource-plugin.version>3.1.0</maven-resource-plugin.version>
-        <!-- Compiler -->
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.quarkus</groupId>
-                <artifactId>quarkus-bom</artifactId>
-                <version>${quarkus.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -51,22 +32,5 @@
             <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>io.quarkus</groupId>
-                <artifactId>quarkus-maven-plugin</artifactId>
-                <version>${quarkus.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

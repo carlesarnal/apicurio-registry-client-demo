@@ -16,7 +16,7 @@ import java.util.UUID;
  *
  * @author Carles Arnal <carnalca@redhat.com>
  */
-public class SimpleRegistryDemoApp {
+public class SimpleRegistryDemo {
 
     private static final SimpleRegistryService service;
 
