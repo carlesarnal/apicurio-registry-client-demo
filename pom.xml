@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.apicurio.registry.client.demo</groupId>
+    <artifactId>apicurio-registry-client-demo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Apicurio Service Registry Client Demo</name>
+    <description>Apicurio Service Registry Client Demo</description>
+
+    <properties>
+        <registry.version>1.2.3-client-demo-SNAPSHOT</registry.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <!-- Quarkus -->
+        <quarkus.version>1.5.1.Final</quarkus.version>
+        <!-- Proto -->
+        <os-maven-plugin.version>1.6.1</os-maven-plugin.version>
+        <!-- Maven plugins-->
+        <maven-resource-plugin.version>3.1.0</maven-resource-plugin.version>
+        <!-- Compiler -->
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${quarkus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-registry-rest-client</artifactId>
+            <version>${registry.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${quarkus.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
