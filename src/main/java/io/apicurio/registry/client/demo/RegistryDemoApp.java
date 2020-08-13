@@ -1,10 +1,10 @@
 package io.apicurio.registry.client.demo;
 
-import io.apicurio.registry.client.RegistryService;
 import io.apicurio.registry.rest.beans.ArtifactMetaData;
 import io.apicurio.registry.rest.beans.IfExistsType;
 import io.apicurio.registry.types.ArtifactType;
-import io.registry.client.CompatibleClient;
+import io.registry.client.RegistryClient;
+import io.registry.client.RegistryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +12,6 @@ import javax.ws.rs.WebApplicationException;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import java.util.concurrent.CompletionStage;
 
 
 /**
@@ -23,18 +22,18 @@ import java.util.concurrent.CompletionStage;
  * 3) Delete the schema.
  *
  *
- * @author eric.wittmann@gmail.com
+ * @author Carles Arnal <carnalca@redhat.com>
  */
 public class RegistryDemoApp {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistryDemoApp.class);
 
-    private static RegistryService service;
+    private static final RegistryService service;
 
     static {
         // Create a Service Registry client
         String registryUrl = "http://localhost:8080/api";
-        service = CompatibleClient.createCompatible(registryUrl);
+        service = RegistryClient.create(registryUrl);
     }
 
     public static void main(String[] args) throws Exception {
@@ -47,6 +46,11 @@ public class RegistryDemoApp {
 
             try {
                 createSchemaInServiceRegistry(artifactId, Constants.SCHEMA);
+
+                getSchemaFromRegistry(artifactId);
+
+                deleteSchema(artifactId);
+
             } catch (Exception e) {
                 if (is409Error(e)) {
                     LOGGER.warn("\n\n--------------\nWARNING: Schema already existed in registry!\n--------------\n");
@@ -58,7 +62,6 @@ public class RegistryDemoApp {
 
             LOGGER.info("\n\n--------------\nBootstrapping complete.\n--------------\n");
         } finally {
-            service.close();
         }
     }
 
@@ -75,9 +78,49 @@ public class RegistryDemoApp {
         LOGGER.info("=====> Creating artifact in the registry for JSON Schema with ID: {}", artifactId);
         try {
             ByteArrayInputStream content = new ByteArrayInputStream(schema.getBytes(StandardCharsets.UTF_8));
-            CompletionStage<ArtifactMetaData> artifact = service.createArtifact(ArtifactType.JSON, artifactId, IfExistsType.RETURN, content);
-            ArtifactMetaData metaData = artifact.toCompletableFuture().get();
+            ArtifactMetaData metaData = service.createArtifact(ArtifactType.JSON, artifactId, IfExistsType.RETURN, content);
+            assert metaData != null;
             LOGGER.info("=====> Successfully created JSON Schema artifact in Service Registry: {}", metaData);
+            LOGGER.info("---------------------------------------------------------");
+        } catch (Exception t) {
+            throw t;
+        }
+    }
+
+    /**
+     * Get the artifact from the registry.
+     *
+     * @param artifactId
+     * @throws Exception
+     */
+    private static ArtifactMetaData getSchemaFromRegistry(String artifactId) throws Exception {
+
+        LOGGER.info("---------------------------------------------------------");
+        LOGGER.info("=====> Fetching artifact from the registry for JSON Schema with ID: {}", artifactId);
+        try {
+            ArtifactMetaData metaData = service.getArtifactMetaData(artifactId);
+            assert metaData != null;
+            LOGGER.info("=====> Successfully fetched JSON Schema artifact in Service Registry: {}", metaData);
+            LOGGER.info("---------------------------------------------------------");
+            return metaData;
+        } catch (Exception t) {
+            throw t;
+        }
+    }
+
+    /**
+     * Delete the artifact from the registry.
+     *
+     * @param artifactId
+     * @throws Exception
+     */
+    private static void deleteSchema(String artifactId) throws Exception {
+
+        LOGGER.info("---------------------------------------------------------");
+        LOGGER.info("=====> Deleting artifact from the registry for JSON Schema with ID: {}", artifactId);
+        try {
+             service.deleteArtifact(artifactId);
+            LOGGER.info("=====> Successfully deleted JSON Schema artifact in Service Registry.");
             LOGGER.info("---------------------------------------------------------");
         } catch (Exception t) {
             throw t;
