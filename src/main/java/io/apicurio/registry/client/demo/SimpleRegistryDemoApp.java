@@ -3,14 +3,7 @@ package io.apicurio.registry.client.demo;
 import io.apicurio.registry.client.SimpleRegistryClient;
 import io.apicurio.registry.client.SimpleRegistryService;
 import io.apicurio.registry.client.demo.util.RegistryDemoUtil;
-import io.apicurio.registry.rest.beans.ArtifactMetaData;
-import io.apicurio.registry.rest.beans.IfExistsType;
-import io.apicurio.registry.types.ArtifactType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 
@@ -36,7 +29,7 @@ public class SimpleRegistryDemoApp {
     public static void main(String[] args) throws Exception {
 
         // Register the JSON Schema schema in the Apicurio registry.
-        String artifactId = UUID.randomUUID().toString();
+        final String artifactId = UUID.randomUUID().toString();
 
         RegistryDemoUtil.createSchemaInServiceRegistry(service, artifactId, Constants.SCHEMA);
 

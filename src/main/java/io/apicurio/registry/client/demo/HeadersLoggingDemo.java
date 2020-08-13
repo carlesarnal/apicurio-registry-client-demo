@@ -27,7 +27,7 @@ public class HeadersLoggingDemo {
 
     static {
         // Create a Service Registry client
-        String registryUrl = "http://localhost:8080/api/";
+        final String registryUrl = "http://localhost:8080/api/";
 
         final OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(new HeadersInterceptor())
@@ -39,7 +39,7 @@ public class HeadersLoggingDemo {
     public static void main(String[] args) throws Exception {
 
         // Register the JSON Schema schema in the Apicurio registry.
-        String artifactId = UUID.randomUUID().toString();
+        final String artifactId = UUID.randomUUID().toString();
 
         RegistryDemoUtil.createSchemaInServiceRegistry(service, artifactId, Constants.SCHEMA);
 
@@ -61,14 +61,14 @@ public class HeadersLoggingDemo {
             final Request request = chain.request();
             final Headers requestHeaders = request.headers();
 
-            for (String name: requestHeaders.names()) {
+            for (String name : requestHeaders.names()) {
                 LOGGER.info("Request header with name: {} and value: {}", name, requestHeaders.get(name));
             }
 
             final Response response = chain.proceed(request);
             final Headers responseHeaders = response.headers();
 
-            for (String name: responseHeaders.names()) {
+            for (String name : responseHeaders.names()) {
                 LOGGER.info("Response header with name: {} and value: {}", name, responseHeaders.get(name));
             }
 
