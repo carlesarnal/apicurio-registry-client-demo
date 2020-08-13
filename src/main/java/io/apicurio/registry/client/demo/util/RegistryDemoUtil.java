@@ -1,7 +1,7 @@
-package io.apicurio.registry.client.demo;
+package io.apicurio.registry.client.demo.util;
 
-import io.apicurio.registry.client.SimpleRegistryClient;
 import io.apicurio.registry.client.SimpleRegistryService;
+import io.apicurio.registry.client.demo.SimpleRegistryDemoApp;
 import io.apicurio.registry.rest.beans.ArtifactMetaData;
 import io.apicurio.registry.rest.beans.IfExistsType;
 import io.apicurio.registry.types.ArtifactType;
@@ -10,46 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
+public class RegistryDemoUtil {
 
-/**
- * Simple demo app that shows how to use the client.
- * <p>
- * 1) Register a new schema in the Registry.
- * 2) Fetch the newly created schema.
- * 3) Delete the schema.
- *
- * @author Carles Arnal <carnalca@redhat.com>
- */
-public class RegistryDemoApp {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RegistryDemoApp.class);
-
-    private static final SimpleRegistryService service;
-
-    static {
-        // Create a Service Registry client
-        String registryUrl = "http://localhost:8080/api/";
-        service = SimpleRegistryClient.create(registryUrl);
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        // Register the JSON Schema schema in the Apicurio registry.
-        String artifactId = UUID.randomUUID().toString();
-
-        createSchemaInServiceRegistry(artifactId, Constants.SCHEMA);
-
-        //Wait for the artifact to be available.
-        Thread.sleep(1000);
-
-        getSchemaFromRegistry(artifactId);
-
-        deleteSchema(artifactId);
-
-        System.exit(0);
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistryDemoUtil.class);
 
     /**
      * Create the artifact in the registry (or update it if it already exists).
@@ -57,7 +21,7 @@ public class RegistryDemoApp {
      * @param artifactId
      * @param schema
      */
-    private static void createSchemaInServiceRegistry(String artifactId, String schema) {
+    public static void createSchemaInServiceRegistry(SimpleRegistryService service, String artifactId, String schema) {
 
         LOGGER.info("---------------------------------------------------------");
         LOGGER.info("=====> Creating artifact in the registry for JSON Schema with ID: {}", artifactId);
@@ -77,7 +41,7 @@ public class RegistryDemoApp {
      *
      * @param artifactId
      */
-    private static ArtifactMetaData getSchemaFromRegistry(String artifactId) {
+    public static ArtifactMetaData getSchemaFromRegistry(SimpleRegistryService service, String artifactId) {
 
         LOGGER.info("---------------------------------------------------------");
         LOGGER.info("=====> Fetching artifact from the registry for JSON Schema with ID: {}", artifactId);
@@ -97,7 +61,7 @@ public class RegistryDemoApp {
      *
      * @param artifactId
      */
-    private static void deleteSchema(String artifactId) {
+    public static void deleteSchema(SimpleRegistryService service, String artifactId) {
 
         LOGGER.info("---------------------------------------------------------");
         LOGGER.info("=====> Deleting artifact from the registry for JSON Schema with ID: {}", artifactId);
